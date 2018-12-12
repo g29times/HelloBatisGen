@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="C:/Users/Administrator/.m2/repository/mysql/mysql-connector-java/8.0.13/mysql-connector-java-8.0.13.jar" />
+
+    <context id="ds_0" targetRuntime="MyBatis3">
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/ds_0?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC&amp;rewriteBatchedStatements=true" userId="root"
+                        password="root"/>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!-- 生成model实体类文件位置 -->
+        <javaModelGenerator targetPackage="model"
+                            targetProject="F:\WorkSpace\HelloBatisGen\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成mapper.xml配置文件位置 -->
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="F:\WorkSpace\HelloBatisGen\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成Mapper接口文件位置 -->
+        <javaClientGenerator targetPackage="dao"
+                             targetProject="F:\WorkSpace\HelloBatisGen\src\main\java" type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 需要生成的实体类对应的表名，多个实体类复制多份该配置即可 -->
+        <table tableName="t_order_1" domainObjectName="Order"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+        <table tableName="t_order_item_1" domainObjectName="OrderItem"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+
+    </context>
+</generatorConfiguration>

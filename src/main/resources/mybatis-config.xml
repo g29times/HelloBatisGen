@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- configuration:核心配置文件，数据源，事务 -->
+<configuration>
+
+    <!--&lt;!&ndash;properties：引入外部资源文件&ndash;&gt;-->
+    <!--<properties resource="jdbc.properties"/>-->
+    <!---->
+    <!--<settings>-->
+        <!--<setting name="logImpl" value="LOG4J"/>-->
+        <!--&lt;!&ndash; 其他配置 &ndash;&gt;-->
+        <!--&lt;!&ndash; 数据库列名转驼峰式命名属性 &ndash;&gt;-->
+        <!--<setting name="mapUnderscoreToCamelCase" value="ture"/>-->
+    <!--</settings>-->
+
+    <!--批量扫描定义别名：表示model包路径下所有类都自动被定义了别名 别名名称：类名，大小写随意-->
+    <typeAliases>
+        <package name="model" />
+    </typeAliases>
+
+    <environments default="development">
+        <!-- 可以配置多个环境指向不同数据库，每个数据库可分别用一个SqlSessionFactory创建实例 -->
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED"> <!-- POOLED | UNPOOLED -->
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/ds_0?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC&amp;rewriteBatchedStatements=true"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--引入外部映射文件：引入多个映射文件-->
+    <mappers>
+        <mapper resource="mapper/OrderMapper.xml"/>
+        <mapper resource="mapper/OrderItemMapper.xml"/>
+        <!--<package name="mapper"/>-->
+    </mappers>
+
+</configuration>

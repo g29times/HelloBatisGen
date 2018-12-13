@@ -37,12 +37,12 @@
         </javaClientGenerator>
 
         <!-- 需要生成的实体类对应的表名，多个实体类复制多份该配置即可 -->
-        <table tableName="t_order_1" domainObjectName="Order"
+        <table tableName="t_order_0" domainObjectName="Order"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>
-        <table tableName="t_order_item_1" domainObjectName="OrderItem"
+        <table tableName="t_order_item_0" domainObjectName="OrderItem"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

@@ -166,6 +166,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <!--<include>**/*</include>-->
+                    <include>sharding-config.yml</include>
                     <include>mybatis-config.xml</include>
                 </includes>
             </resource>

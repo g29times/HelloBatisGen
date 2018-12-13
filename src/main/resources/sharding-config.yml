@@ -1,82 +1,96 @@
----
+#local
+#---
 dataSources:
-  main:
+  ds_0: !!com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:3306/ds_0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
     username: root
     password: root
-  main_slave01:
+  ds_1: !!com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:3306/ds_1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
     username: root
     password: root
-  data:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
-    username: root
-    password: root
-  data_slave01:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
-    username: root
-    password: root
-  stats:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
-    username: root
-    password: root
-  stats_slave01:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
-    username: root
-    password: root
+
+##prod
+#---
+#dataSources:
+#  main:
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+#    username: root
+#    password: root
+#  main_slave01:
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+#    username: root
+#    password: root
+#  data:
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+#    username: root
+#    password: root
+#  data_slave01:
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+#    username: root
+#    password: root
+#  stats:
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+#    username: root
+#    password: root
+#  stats_slave01:
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+#    username: root
+#    password: root
 
 shardingRule:
   tables:
     t_order:
-      actualDataNodes: ms_ds${0..1}.t_order${0..1}
+      actualDataNodes: ds_${0}.t_order_${0..1}
       tableStrategy:
         inline:
           shardingColumn: order_id
-          algorithmExpression: t_order${order_id % 2}
+          algorithmExpression: t_order_${order_id % 2}
       keyGeneratorColumnName: order_id
     t_order_item:
-      actualDataNodes: ms_ds${0..1}.t_order_item${0..1}
+      actualDataNodes: ds_${0}.t_order_item_${[0, 1]}
       tableStrategy:
         inline:
           shardingColumn: order_id
-          algorithmExpression: t_order_item${order_id % 2}
+          algorithmExpression: t_order_item_${order_id % 2}
   bindingTables:
   - t_order,t_order_item
-  broadcastTables:
-  - t_config
+#  broadcastTables:
+#  - t_config
 
   defaultDataSourceName: ds_0
   defaultDatabaseStrategy:
     inline:
       shardingColumn: user_id
-      algorithmExpression: ms_ds${user_id % 2}
+      algorithmExpression: ds_0
   defaultTableStrategy:
     none:
   defaultKeyGeneratorClassName: io.shardingsphere.core.keygen.DefaultKeyGenerator
 
   masterSlaveRules:
-    ms_ds0:
-      masterDataSourceName: ds0
+    ds_0:
+      masterDataSourceName: ds_0
       slaveDataSourceNames:
-      - ds0_slave0
-      - ds0_slave1
+      - ds_1
       loadBalanceAlgorithmType: ROUND_ROBIN
-      configMap:
-        master-slave-key0: master-slave-value0
-    ms_ds1:
-      masterDataSourceName: ds1
-      slaveDataSourceNames:
-      - ds1_slave0
-      - ds1_slave1
-      loadBalanceAlgorithmType: ROUND_ROBIN
-      configMap:
-        master-slave-key1: master-slave-value1
+#      configMap:
+#        master-slave-key0: master-slave-value0
+#    ms_ds1:
+#      masterDataSourceName: ds1
+#      slaveDataSourceNames:
+#      - ds1_slave0
+#      - ds1_slave1
+#      loadBalanceAlgorithmType: ROUND_ROBIN
+#      configMap:
+#        master-slave-key1: master-slave-value1
 
   props:
     sql.show: true

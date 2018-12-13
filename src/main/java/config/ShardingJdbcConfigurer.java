@@ -44,6 +44,7 @@ public class ShardingJdbcConfigurer {
             File file = new File(url.getFile());
             dataSource = YamlShardingDataSourceFactory.createDataSource(file);
         } catch (Exception e) {
+            e.printStackTrace();
             dataSource = localizeDataSource();
         }
 

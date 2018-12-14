@@ -88,7 +88,7 @@ public class ShardingJdbcConfigurer {
      */
     @Bean
     public DataSource dataSource(@Qualifier("ds_0") DataSource ds_0, @Qualifier("ds_1") DataSource ds_1) throws SQLException {
-        // 配置 分片规则
+        // 1 配置 分库分表 分片规则
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
         shardingRuleConfig.getTableRuleConfigs().add(configOrderTableRule());
         shardingRuleConfig.getTableRuleConfigs().add(configOrderItemTableRule());
@@ -100,13 +100,15 @@ public class ShardingJdbcConfigurer {
         shardingRuleConfig.setDefaultTableShardingStrategyConfig(
                 new InlineShardingStrategyConfiguration("order_id",
                         "t_order_${order_id % 2}"));
+
         Map<String, DataSource> dataSourceMap = new HashMap<>();
         dataSourceMap.put("ds_0", ds_0);
         dataSourceMap.put("ds_1", ds_1);
 
-        // 配置 读写分离规则
+        // 2 配置 主从 读写分离规则
         shardingRuleConfig.setMasterSlaveRuleConfigs(configMasterSlaveRule());
 
+        // 3 其他属性
         Properties properties = new Properties();
         properties.setProperty("sql.show", Boolean.TRUE.toString());
 
@@ -201,7 +203,8 @@ public class ShardingJdbcConfigurer {
      * @return
      */
     private List<MasterSlaveRuleConfiguration> configMasterSlaveRule() {
-        MasterSlaveRuleConfiguration rule1 = new MasterSlaveRuleConfiguration("ds_0",
+        MasterSlaveRuleConfiguration rule1 =
+                new MasterSlaveRuleConfiguration("ds_0",
                 "ds_0",
                 Arrays.asList("ds_1"/*"ds_0_slave_0", "ds_0_slave_1"*/));
 //        MasterSlaveRuleConfiguration rule2 = new MasterSlaveRuleConfiguration("ds_1",
